@@ -4,21 +4,24 @@ use crate::{GenericNotificationLayer, Message};
 
 #[derive(Debug, Clone)]
 pub struct TelegramConfig {
-    codebase_name: &'static str,
-    bot_token: &'static str,
-    chat_id: &'static str,
+    codebase_name: String,
+    users_to_tag: Vec<String>,
+    bot_token: String,
+    chat_id: String,
     request_client: reqwest::blocking::Client,
 }
 
 impl TelegramConfig {
     pub fn new(
-        codebase_name: &'static str,
-        bot_token: &'static str,
-        chat_id: &'static str,
+        codebase_name: String,
+        users_to_tag: Vec<String>,
+        bot_token: String,
+        chat_id: String,
         request_client: reqwest::blocking::Client,
     ) -> Self {
         Self {
             codebase_name,
+            users_to_tag,
             request_client,
             chat_id,
             bot_token,
@@ -33,10 +36,13 @@ impl TelegramConfig {
             let url = format!("https://api.telegram.org/bot{}/sendMessage", ctx.bot_token);
 
             let params = [
-                ("chat_id", ctx.chat_id),
+                ("chat_id", ctx.chat_id.clone()),
                 (
                     "text",
-                    &format!("codebase: {} had a error \n {}", ctx.codebase_name, message),
+                    format!(
+                        "{:#?}\ncodebase: {} had a error \n{}",
+                        ctx.users_to_tag, ctx.codebase_name, message
+                    ),
                 ),
             ];
 
