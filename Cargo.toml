@@ -10,7 +10,7 @@ tracing-subscriber = { version = "0.3.17", default-features = false, features = 
   "fmt",
 ] }
 reqwest = { version = "0.12.5", features = ["blocking"] }
-tokio = "1.40.0"
+tokio = "1.13.9"
 eyre = "0.6.12"
 
 [dev-dependencies]
